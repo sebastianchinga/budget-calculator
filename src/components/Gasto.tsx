@@ -8,7 +8,6 @@ type GatoProps = {
 }
 
 export default function Gasto({ gasto, dispatch }: GatoProps) {
-    const { } = gasto
     return (
         <div className="p-3 sm:p-4 rounded-lg border border-slate-700 bg-slate-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4 hover:border-slate-600 transition">
             <div className="flex-1 min-w-0">

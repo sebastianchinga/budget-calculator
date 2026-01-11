@@ -6,6 +6,8 @@ export type ActionsType =
     { type: 'agregar_presupuesto', payload: { presupuesto: number } }
     |
     { type: 'eliminar_gasto', payload: { id: GastoType['id'] } }
+    |
+    { type: 'reiniciar_presupuesto' }
 
 type InitialType = {
     presupuestoInicial: number,
@@ -35,7 +37,6 @@ const calcularDisponible = () => {
     // Retornamos el resultado de disminuir el total de gastos al presupuesto inicial
     return presupuesto - total
 }
-
 
 export const initialState: InitialType = {
     // Obtener el presupuesto inicial del LocalStorage
@@ -77,11 +78,19 @@ export const presupuestoReducer = (state: InitialType = initialState, action: Ac
 
     if (action.type === 'eliminar_gasto') {
         const newArray = state.gastos.filter(item => item.id !== action.payload.id);
-        const total = newArray.reduce((acc, item) => acc + item.gasto ,0)
+        const total = newArray.reduce((acc, item) => acc + item.gasto, 0)
         return {
             ...state,
             gastos: newArray,
             disponible: state.presupuestoInicial - total
+        }
+    }
+
+    if (action.type === 'reiniciar_presupuesto') {
+        return {
+            presupuestoInicial: 0,
+            gastos: [],
+            disponible: 0
         }
     }
 

@@ -65,7 +65,7 @@ function App() {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-                
+
                 <button
                   onClick={() => abrirModal('presupuesto')}
                   className="flex-1 sm:flex-none px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium text-sm sm:text-base text-white bg-emerald-500 transition-all hover:bg-emerald-600"
@@ -73,7 +73,7 @@ function App() {
                   Establecer Presupuesto
                 </button>
                 <button
-                  // onClick={() => dispatch()}
+                  onClick={() => dispatch({ type: "reiniciar_presupuesto" })}
                   className="flex-1 sm:flex-none px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium text-sm sm:text-base text-white bg-red-500 transition-all hover:bg-red-600"
                 >
                   Reiniciar
