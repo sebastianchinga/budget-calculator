@@ -15,7 +15,7 @@ export default function Gasto({ gasto, dispatch }: GatoProps) {
                     {gasto.nombre}
                 </p>
                 <p className="text-xs sm:text-sm text-slate-400 mt-1">
-                    {gasto.fecha}
+                    {gasto.fecha.toLocaleDateString('es-PE')}
                 </p>
             </div>
             <div className="flex items-center gap-2 sm:gap-4">

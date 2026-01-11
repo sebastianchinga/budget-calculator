@@ -10,7 +10,7 @@ function App() {
 
   const [budget, dispatch] = useReducer(presupuestoReducer, initialState);
   const { modal, abrirModal, cerrarModal } = useModal();
-  const [gasto, setGasto] = useState<GastoType>({ id: generarId(), nombre: '', gasto: 0, fecha: '25/05/16' })
+  const [gasto, setGasto] = useState<GastoType>({ id: generarId(), nombre: '', gasto: 0, fecha: new Date })
 
   useEffect(() => {
     localStorage.setItem('gastos', JSON.stringify(budget.gastos))
@@ -25,7 +25,7 @@ function App() {
   const handleGasto = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch({ type: 'agregar_gasto', payload: { newGasto: gasto } })
-    setGasto({ id: generarId(), nombre: '', gasto: 0, fecha: '25/05/16' })
+    setGasto({ id: generarId(), nombre: '', gasto: 0, fecha: new Date() })
     cerrarModal("gasto");
   }
 
