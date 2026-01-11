@@ -30,7 +30,7 @@ function App() {
   }
 
   const calcularPorcentaje = useMemo(() => {
-    const total = budget.gastos.reduce((ac, item) => ac + item.gasto ,0);
+    const total = budget.gastos.reduce((ac, item) => ac + item.gasto, 0);
     return budget.gastos.length > 0 ? (total / budget.presupuestoInicial) * 100 : 0
   }, [budget.gastos])
 
@@ -63,12 +63,23 @@ function App() {
                   <span className="text-slate-400 text-sm sm:text-base">PEN</span>
                 </div>
               </div>
-              <button
-                onClick={() => abrirModal('presupuesto')}
-                className="w-full sm:w-auto px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium text-sm sm:text-base text-white bg-emerald-500 transition-all hover:bg-emerald-600"
-              >
-                Establecer Presupuesto
-              </button>
+
+              <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                
+                <button
+                  onClick={() => abrirModal('presupuesto')}
+                  className="flex-1 sm:flex-none px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium text-sm sm:text-base text-white bg-emerald-500 transition-all hover:bg-emerald-600"
+                >
+                  Establecer Presupuesto
+                </button>
+                <button
+                  // onClick={() => dispatch()}
+                  className="flex-1 sm:flex-none px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium text-sm sm:text-base text-white bg-red-500 transition-all hover:bg-red-600"
+                >
+                  Reiniciar
+                </button>
+              </div>
+
             </div>
             {/* Barra de progreso */}
             <div className="mt-4">
@@ -102,7 +113,7 @@ function App() {
           <div className="space-y-3 pb-20">
             {/* Gasto 1 */}
             {budget.gastos.map(gasto => (
-              <Gasto key={gasto.id} gasto={gasto} />
+              <Gasto key={gasto.id} gasto={gasto} dispatch={dispatch} />
             ))}
           </div>
           {/* Botón Agregar Gasto (Flotante) */}

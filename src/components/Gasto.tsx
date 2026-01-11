@@ -1,11 +1,14 @@
+import convertirMonto from "../helpers/convertirMontos"
+import type { ActionsType } from "../reducers/calculator-reducer"
 import type { GastoType } from "../types"
 
 type GatoProps = {
-    gasto: GastoType
+    gasto: GastoType,
+    dispatch: React.Dispatch<ActionsType>
 }
 
-export default function Gasto({gasto}: GatoProps) {
-    const {} = gasto
+export default function Gasto({ gasto, dispatch }: GatoProps) {
+    const { } = gasto
     return (
         <div className="p-3 sm:p-4 rounded-lg border border-slate-700 bg-slate-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4 hover:border-slate-600 transition">
             <div className="flex-1 min-w-0">
@@ -16,9 +19,16 @@ export default function Gasto({gasto}: GatoProps) {
                     {gasto.fecha}
                 </p>
             </div>
-            <p className="text-base sm:text-lg font-bold text-emerald-500">
-                -{gasto.gasto}
-            </p>
+            <div className="flex items-center gap-2 sm:gap-4">
+                <p className="text-base sm:text-lg font-bold text-emerald-500">-{convertirMonto(gasto.gasto)}</p>
+                <button
+                    onClick={() => dispatch({ type: "eliminar_gasto", payload: { id: gasto.id } })}
+                    className="px-3 py-1 rounded bg-red-500 hover:bg-red-600 text-white text-xs sm:text-sm font-medium transition"
+                >
+                    Eliminar
+                </button>
+            </div>
+
         </div>
     )
 }

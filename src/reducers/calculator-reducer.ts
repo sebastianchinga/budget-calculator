@@ -1,9 +1,11 @@
 import type { GastoType } from "../types";
 
-type ActionsType =
+export type ActionsType =
     { type: 'agregar_gasto', payload: { newGasto: GastoType } }
     |
     { type: 'agregar_presupuesto', payload: { presupuesto: number } }
+    |
+    { type: 'eliminar_gasto', payload: { id: GastoType['id'] } }
 
 type InitialType = {
     presupuestoInicial: number,
@@ -70,6 +72,16 @@ export const presupuestoReducer = (state: InitialType = initialState, action: Ac
             ...state,
             presupuestoInicial: action.payload.presupuesto,
             disponible: action.payload.presupuesto
+        }
+    }
+
+    if (action.type === 'eliminar_gasto') {
+        const newArray = state.gastos.filter(item => item.id !== action.payload.id);
+        const total = newArray.reduce((acc, item) => acc + item.gasto ,0)
+        return {
+            ...state,
+            gastos: newArray,
+            disponible: state.presupuestoInicial - total
         }
     }
 
