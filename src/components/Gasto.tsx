@@ -1,7 +1,8 @@
-import { useState } from "react"
 import convertirMonto from "../helpers/convertirMontos"
+import formatearFechas from "../helpers/formatearFechas"
 import type { ActionsType } from "../reducers/calculator-reducer"
 import type { GastoType } from "../types"
+// import formatearFechas from "../helpers/formatearFechas"
 
 type GatoProps = {
     gasto: GastoType,
@@ -17,7 +18,7 @@ export default function Gasto({ gasto, dispatch }: GatoProps) {
                     {gasto.nombre}
                 </p>
                 <p className="text-xs sm:text-sm text-slate-400 mt-1">
-                    {new Date(gasto.fecha).toLocaleDateString('es-PE')}
+                    {formatearFechas(gasto.fecha)}
                 </p>
             </div>
             <div className="flex items-center gap-2 sm:gap-4">
