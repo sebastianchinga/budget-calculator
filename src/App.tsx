@@ -29,6 +29,12 @@ function App() {
     cerrarModal("gasto");
   }
 
+  const cancelarPresupuesto = () => {
+    budget.presupuestoInicial = 0,
+    budget.disponible = 0;
+    cerrarModal("presupuesto");
+  }
+
   const calcularPorcentaje = useMemo(() => {
     const total = budget.gastos.reduce((ac, item) => ac + item.gasto, 0);
     return budget.gastos.length > 0 ? (total / budget.presupuestoInicial) * 100 : 0
@@ -146,7 +152,7 @@ function App() {
 
             <div className="flex flex-col sm:flex-row gap-3 mt-6">
               <button
-                onClick={() => cerrarModal('presupuesto')}
+                onClick={cancelarPresupuesto}
                 className="flex-1 px-4 py-2 rounded-lg border border-slate-600 text-sm text-slate-100 hover:border-slate-500 transition"
               >
                 Cancelar

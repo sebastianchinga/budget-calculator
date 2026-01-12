@@ -2,7 +2,6 @@ import convertirMonto from "../helpers/convertirMontos"
 import formatearFechas from "../helpers/formatearFechas"
 import type { ActionsType } from "../reducers/calculator-reducer"
 import type { GastoType } from "../types"
-// import formatearFechas from "../helpers/formatearFechas"
 
 type GatoProps = {
     gasto: GastoType,
