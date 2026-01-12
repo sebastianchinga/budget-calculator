@@ -1,3 +1,4 @@
+import { useState } from "react"
 import convertirMonto from "../helpers/convertirMontos"
 import type { ActionsType } from "../reducers/calculator-reducer"
 import type { GastoType } from "../types"
@@ -8,6 +9,7 @@ type GatoProps = {
 }
 
 export default function Gasto({ gasto, dispatch }: GatoProps) {
+
     return (
         <div className="p-3 sm:p-4 rounded-lg border border-slate-700 bg-slate-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4 hover:border-slate-600 transition">
             <div className="flex-1 min-w-0">
@@ -15,7 +17,7 @@ export default function Gasto({ gasto, dispatch }: GatoProps) {
                     {gasto.nombre}
                 </p>
                 <p className="text-xs sm:text-sm text-slate-400 mt-1">
-                    {gasto.fecha?.toLocaleString('es-PE')}
+                    {new Date(gasto.fecha).toLocaleDateString('es-PE')}
                 </p>
             </div>
             <div className="flex items-center gap-2 sm:gap-4">
