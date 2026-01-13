@@ -4,3 +4,8 @@ export type GastoType = {
     gasto: number,
     fecha: Date
 }
+
+export type AlertaType = {
+    tipo?: 'error' | 'exito',
+    mensaje: string
+}

@@ -5,12 +5,14 @@ import { useModal } from "./hooks/useModal";
 import convertirMonto from "./helpers/convertirMontos";
 import type { GastoType } from "./types";
 import generarId from "./helpers/generarId";
+import useAlerta from "./hooks/useAlerta";
 
 function App() {
 
   const [budget, dispatch] = useReducer(presupuestoReducer, initialState);
   const { modal, abrirModal, cerrarModal } = useModal();
   const [gasto, setGasto] = useState<GastoType>({ id: generarId(), nombre: '', gasto: 0, fecha: new Date })
+  const { alerta, mostrarAlerta, ocultarAlerta } = useAlerta();
 
   useEffect(() => {
     localStorage.setItem('gastos', JSON.stringify(budget.gastos))
@@ -27,18 +29,55 @@ function App() {
     dispatch({ type: 'agregar_gasto', payload: { newGasto: gasto } })
     setGasto({ id: generarId(), nombre: '', gasto: 0, fecha: new Date() })
     cerrarModal("gasto");
+    mostrarAlerta({
+      mensaje: '✓ Gasto agregado correctamente',
+      tipo: "exito"
+    })
+
+    setTimeout(() => {
+      ocultarAlerta();
+    }, 3000);
+
   }
 
   const cancelarPresupuesto = () => {
     budget.presupuestoInicial = 0,
-    budget.disponible = 0;
+      budget.disponible = 0;
     cerrarModal("presupuesto");
+  }
+
+  const abrirModalGasto = () => {
+    if (budget.disponible > 0) {
+      abrirModal('gasto');
+    } else {
+      mostrarAlerta({
+        mensaje: '⚠️ No hay presupuesto establecido',
+        tipo: "error"
+      })
+    }
+
+    setTimeout(() => {
+      ocultarAlerta()
+    }, 3000);
+  }
+
+  const cancelarGasto = () => {
+    cerrarModal('gasto');
+    setGasto({
+      id: generarId(),
+      nombre: '',
+      gasto: 0,
+      fecha: new Date
+    })
+    dispatch({ type: 'cancelar' })
   }
 
   const calcularPorcentaje = useMemo(() => {
     const total = budget.gastos.reduce((ac, item) => ac + item.gasto, 0);
     return budget.gastos.length > 0 ? (total / budget.presupuestoInicial) * 100 : 0
   }, [budget.gastos])
+
+  const { mensaje } = alerta;
 
   return (
     <>
@@ -123,9 +162,20 @@ function App() {
             ))}
           </div>
           {/* Botón Agregar Gasto (Flotante) */}
-          <button onClick={() => budget.disponible > 0 && abrirModal('gasto')} className="fixed bottom-6 right-4 sm:right-6 w-12 sm:w-14 h-12 sm:h-14 rounded-full shadow-lg flex items-center justify-center text-lg sm:text-xl font-bold text-white bg-emerald-500 hover:bg-emerald-600 transition z-40">
+          <button onClick={abrirModalGasto} className="fixed bottom-6 right-4 sm:right-6 w-12 sm:w-14 h-12 sm:h-14 rounded-full shadow-lg flex items-center justify-center text-lg sm:text-xl font-bold text-white bg-emerald-500 hover:bg-emerald-600 transition z-40">
             +
           </button>
+
+          {mensaje && (
+            <div className={`fixed left-4 sm:left-6 top-6 ${alerta.tipo === 'error' ? 'bg-red-500' : 'bg-emerald-500'} text-white px-4 sm:px-6 py-3 sm:py-4 rounded-lg shadow-lg z-40 max-w-xs animate-pulse`}
+            >
+              <p className="text-sm sm:text-base font-medium">
+                {alerta.mensaje}
+              </p>
+            </div>
+          )}
+
+
         </div>
       </div>
 
@@ -204,7 +254,7 @@ function App() {
             </div>
             <div className="flex flex-col sm:flex-row gap-3">
               <button
-                onClick={() => cerrarModal("gasto")}
+                onClick={cancelarGasto}
                 className="flex-1 px-4 py-2 rounded-lg border border-slate-600 text-sm text-slate-100 hover:border-slate-500 transition"
               >
                 Cancelar
