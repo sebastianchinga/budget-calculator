@@ -69,7 +69,6 @@ function App() {
       gasto: 0,
       fecha: new Date
     })
-    dispatch({ type: 'cancelar' })
   }
 
   const calcularPorcentaje = useMemo(() => {

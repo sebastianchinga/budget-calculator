@@ -8,8 +8,6 @@ export type ActionsType =
     { type: 'eliminar_gasto', payload: { id: GastoType['id'] } }
     |
     { type: 'reiniciar_presupuesto' }
-    |
-    { type: 'cancelar' }
 
 type InitialType = {
     presupuestoInicial: number,
@@ -96,12 +94,6 @@ export const presupuestoReducer = (state: InitialType = initialState, action: Ac
         }
     }
 
-    if (action.type === 'cancelar') {
-        return {
-            ...state,
-            gastos: [...state.gastos]
-        }
-    }
 
     return state;
 }
