@@ -12,16 +12,10 @@ function App() {
 
   const totalGastado = useMemo(() => state.gastos.reduce((acc, item) => acc + item.gasto, 0), [state.gastos]);
 
-  const porcentajeGastado = useMemo(() => {
-    if (state.gastos.length > 0) {
-      const total = state.gastos.reduce((acc, item) => acc + item.gasto, 0);
-      const resultado = (total / state.presupuestoInicial) * 100
-      return resultado
-    }
-    return 0
-  }, [state.gastos, state.presupuestoInicial]);
-
-  // porcentajeGastado
+  const calcularPorcentaje = useMemo(() => {
+    const total = state.gastos.reduce((ac, item) => ac + item.gasto, 0);
+    return state.gastos.length > 0 ? (total / state.presupuestoInicial) * 100 : 0
+  }, [state.gastos])
 
 
   return (
@@ -78,7 +72,7 @@ function App() {
                 <span className="font-medium text-slate-100">{convertirMonto(totalGastado)} / {convertirMonto(state.presupuestoInicial)}</span>
               </div>
               <div className="w-full h-2 bg-slate-700 rounded-full overflow-hidden">
-                <div className="h-full bg-emerald-500" style={{ width: `${porcentajeGastado}%` }} />
+                <div className="h-full bg-emerald-500" style={{ width: `${calcularPorcentaje}%` }} />
               </div>
             </div>
           </div>

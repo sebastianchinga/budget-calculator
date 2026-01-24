@@ -48,10 +48,12 @@ export const presupuestoReducer = (state: InitialType = initialState, action: Ac
     }
 
     if (action.type === 'reiniciar_presupuesto') {
+
         return {
             ...state,
             presupuestoInicial: 0,
-            disponible: 0
+            disponible: 0,
+            gastos: []
         }
     }
 
