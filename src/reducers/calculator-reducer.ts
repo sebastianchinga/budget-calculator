@@ -8,92 +8,104 @@ export type ActionsType =
     { type: 'eliminar_gasto', payload: { id: GastoType['id'] } }
     |
     { type: 'reiniciar_presupuesto' }
+    |
+    {type: 'abrir-modal-presupuesto'}
+    |
+    {type: 'cerrar-modal-presupuesto'}
+    |
+    {type: 'abrir-modal-gasto'}
+    |
+    {type: 'cerrar-modal-gasto'}
 
-type InitialType = {
+export type InitialType = {
     presupuestoInicial: number,
     gastos: GastoType[],
-    disponible: number
-}
-
-const obtenerGastoStorage = () => {
-    const gastos = localStorage.getItem('gastos');
-    return gastos ? JSON.parse(gastos) : []
-}
-
-const obtenerPresupuesto = () => {
-    const presupuesto = localStorage.getItem('presupuesto');
-    return presupuesto ? JSON.parse(presupuesto) : 0
-}
-
-const calcularDisponible = () => {
-
-    // Obteniendo el presupuesto del localstorage
-    const presupuesto: number = obtenerPresupuesto();
-
-    // Obteniendo el array gastos
-    const gastos: GastoType[] = obtenerGastoStorage();
-    // Sumar el gasto total de todos los gastos
-    const total = gastos.reduce((acc, item) => acc + item.gasto, 0);
-    // Retornamos el resultado de disminuir el total de gastos al presupuesto inicial
-    return presupuesto - total
+    disponible: number,
+    modalGasto: boolean
+    modalPresupuesto: boolean
 }
 
 export const initialState: InitialType = {
     // Obtener el presupuesto inicial del LocalStorage
-    presupuestoInicial: obtenerPresupuesto(),
+    presupuestoInicial: 0,
     // Obtener el array de gastos del LocalStorage
-    gastos: obtenerGastoStorage(),
+    gastos: [],
     // Calcular el monto disponible calculando el presupuesto del LS menos con el total de gastos del LS
-    disponible: calcularDisponible()
+    disponible: 0,
+    modalGasto: false,
+    modalPresupuesto: false
 }
 
 export const presupuestoReducer = (state: InitialType = initialState, action: ActionsType) => {
-
-    if (action.type === 'agregar_gasto') {
-        if (state.presupuestoInicial > 0) {
-            let newArray = [...state.gastos, action.payload.newGasto];
-            const total = newArray.reduce((acc, item) => acc + item.gasto, 0);
-
-            return {
-                ...state,
-                gastos: newArray,
-                disponible: state.presupuestoInicial - total
-            }
-        }
-
-        return {
-            ...state,
-            disponible: state.disponible
-        }
-
-    }
 
     if (action.type === 'agregar_presupuesto') {
         return {
             ...state,
             presupuestoInicial: action.payload.presupuesto,
-            disponible: action.payload.presupuesto
-        }
-    }
-
-    if (action.type === 'eliminar_gasto') {
-        const newArray = state.gastos.filter(item => item.id !== action.payload.id);
-        const total = newArray.reduce((acc, item) => acc + item.gasto, 0)
-        return {
-            ...state,
-            gastos: newArray,
-            disponible: state.presupuestoInicial - total
+            disponible: action.payload.presupuesto,
+            modalPresupuesto: false
         }
     }
 
     if (action.type === 'reiniciar_presupuesto') {
         return {
+            ...state,
             presupuestoInicial: 0,
-            gastos: [],
             disponible: 0
         }
     }
 
+    if (action.type === 'abrir-modal-presupuesto') {
+        return {
+            ...state,
+            modalPresupuesto: true
+        }
+    }
+
+    if (action.type === 'cerrar-modal-presupuesto') {
+        return {
+            ...state,
+            modalPresupuesto: false
+        }
+    }
+
+    if (action.type === 'abrir-modal-gasto') {
+        return {
+            ...state,
+            modalGasto: true
+        }
+    }
+
+    if (action.type === 'cerrar-modal-gasto') {
+        return {
+            ...state,
+            modalGasto: false
+        }
+    }
+
+    if (action.type === 'agregar_gasto') {
+        let newArray: GastoType[] = [];
+        if (state.disponible > 0) {
+            newArray = [...state.gastos, action.payload.newGasto]
+        }
+
+        return {
+            ...state,
+            gastos: newArray,
+            disponible: state.presupuestoInicial - newArray.reduce((total, item) => total + item.gasto , 0),
+            modalGasto: false
+        }
+    }
+
+    if (action.type === 'eliminar_gasto') {
+        const newArray = state.gastos.filter(item => item.id !== action.payload.id);
+
+        return {
+            ...state,
+            gastos: newArray,
+            disponible: state.presupuestoInicial - newArray.reduce((total, item) => total + item.gasto , 0)
+        }
+    }
 
     return state;
 }

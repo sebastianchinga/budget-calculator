@@ -1,4 +1,4 @@
-import convertirMonto from "../helpers/convertirMontos"
+import convertirMonto from "../helpers/convertirMonto"
 import formatearFechas from "../helpers/formatearFechas"
 import type { ActionsType } from "../reducers/calculator-reducer"
 import type { GastoType } from "../types"
