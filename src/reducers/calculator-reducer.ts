@@ -17,6 +17,25 @@ export type ActionsType =
     |
     {type: 'cerrar-modal-gasto'}
 
+const obtenerPresupuesto = (): number => {
+    const presupuesto = localStorage.getItem('presupuesto');
+    return presupuesto ? JSON.parse(presupuesto) : 0
+}
+
+const obtenerGastos = (): GastoType[] => {
+    const gastos = localStorage.getItem('gastos');
+    return gastos ? JSON.parse(gastos) : []
+}
+
+const calcularDisponible = () => {
+    const gastos = obtenerGastos();
+    const presupuesto = obtenerPresupuesto();
+    const total = gastos.reduce((total, item) => total + item.gasto , 0);
+    const resultado = presupuesto - total;
+
+    return gastos.length === 0 ? presupuesto : resultado
+}
+
 export type InitialType = {
     presupuestoInicial: number,
     gastos: GastoType[],
@@ -27,11 +46,11 @@ export type InitialType = {
 
 export const initialState: InitialType = {
     // Obtener el presupuesto inicial del LocalStorage
-    presupuestoInicial: 0,
+    presupuestoInicial: obtenerPresupuesto(),
     // Obtener el array de gastos del LocalStorage
-    gastos: [],
+    gastos: obtenerGastos(),
     // Calcular el monto disponible calculando el presupuesto del LS menos con el total de gastos del LS
-    disponible: 0,
+    disponible: calcularDisponible(),
     modalGasto: false,
     modalPresupuesto: false
 }

@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import Gasto from "./components/Gasto";
 import GastoForm from "./components/GastoForm";
 import MontoCard from "./components/MontoCard";
@@ -16,6 +16,11 @@ function App() {
     const total = state.gastos.reduce((ac, item) => ac + item.gasto, 0);
     return state.gastos.length > 0 ? (total / state.presupuestoInicial) * 100 : 0
   }, [state.gastos])
+
+  useEffect(() => {
+    localStorage.setItem('gastos', JSON.stringify(state.gastos))
+    localStorage.setItem('presupuesto', JSON.stringify(state.presupuestoInicial))
+  }, [state.gastos, state.presupuestoInicial]);
 
 
   return (
